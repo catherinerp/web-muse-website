@@ -24,7 +24,7 @@ WebMuse is a web application that generates a color palette based on user prompt
 1. Clone the repository:
    ```bash
    git clone https://github.com/catherinerp/web-muse-website.git
-   cd webmuse/server
+   cd webmuse/backend
    ```
 
 2. Install dependencies:
@@ -39,7 +39,7 @@ WebMuse is a web application that generates a color palette based on user prompt
 
 4. Start the backend server:
    ```bash
-   node index.js
+   node server.js
    ```
    The server will run at `http://localhost:8000`.
 

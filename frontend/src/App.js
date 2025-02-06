@@ -58,9 +58,35 @@ function App() {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-gray-100 min-h-screen">
-      <h1 className="text-4xl font-bold text-indigo-600 mb-6">WebMuse</h1>
+      {/* Conditionally render the top navigation bar when palette is available */}
+      {palette.length > 0 && (
+        <div className="w-full bg-gray-800 text-white p-4">
+          <div className="flex justify-between items-center max-w-6xl mx-auto">
+            <h1 className="text-2xl font-bold">WebMuse</h1>
+            <div className="flex space-x-2">
+              {palette.map((color, index) => (
+                <div
+                  key={index}
+                  className="w-8 h-8 rounded-full"
+                  style={{ backgroundColor: color }}
+                ></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
-      <div className="flex items-center bg-white border border-gray-300 rounded-lg shadow-sm w-full max-w-md">
+      {/* Conditionally render the Lorem Ipsum body text when palette is available */}
+      {palette.length > 0 && (
+        <div className="mt-8 text-center text-gray-700 max-w-3xl px-4">
+          <p className="text-lg mb-4">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sit amet accumsan arcu. Vivamus sit amet sagittis purus. Integer sit amet laoreet turpis. Phasellus euismod vitae nunc vel ullamcorper. Nullam ullamcorper nisi at velit vehicula, vel vestibulum nisi malesuada. Integer non neque eget velit cursus dignissim. Nam posuere magna eu eros efficitur, ut maximus felis aliquam. Integer sit amet pretium magna. Aliquam erat volutpat. Cras ultricies urna et turpis aliquet, id tincidunt felis aliquet.
+          </p>
+        </div>
+      )}
+      <h1 className="text-4xl font-bold text-indigo-600 mb-6">WebMuse</h1>
+      {/* Prompt Input */}
+      <div className="flex items-center bg-white border border-gray-300 rounded-lg shadow-sm w-full max-w-md mt-6">
         <input
           type="text"
           placeholder="Type your prompt here..."
@@ -84,6 +110,7 @@ function App() {
         </button>
       </div>
 
+      {/* Error or Palette Display */}
       <div className="mt-6 w-full max-w-md">
         {error && (
           <div className="bg-red-100 text-red-700 p-4 rounded-lg shadow-sm">
