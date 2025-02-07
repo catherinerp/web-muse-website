@@ -33,12 +33,7 @@ WebMuse is a web application that generates a colour palette based on user promp
    npm install
    ```
 
-3. Create a `.env` file and add your Arli AI API key:
-   ```env
-   ARLIAI_API_KEY=your-api-key-here
-   ```
-
-4. Start the backend server:
+3. Start the backend server:
    ```bash
    node server.js
    ```
