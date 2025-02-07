@@ -142,7 +142,7 @@ function App() {
         </button>
       </div>
 
-      {/* Error or Palette Display */}
+      {/* Loading Bar */}
       {progress > 0 && (
         <div className="w-full max-w-md mt-4 bg-gray-200 rounded-full h-2.5">
           <div
