@@ -8,13 +8,26 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [popover, setPopover] = useState(null);
   const [copyMessage, setCopyMessage] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [progress, setProgress] = useState(0);
+
+  const defaultColors = {
+    background: '#F3F4F6',
+    primary: '#4F46E5',
+    text: '#333333',
+    buttonBg: '#6366F1',
+    buttonHover: '#4C51BF',
+  };
 
   const handleGeneratePalette = async () => {
     if (loading) return;
 
+    console.log('Generating palette with prompt:', prompt);
     setLoading(true);
     setError('');
     setPalette([]);
+    setStatusMessage('Generating your color palette...');
+    setProgress(25);
 
     try {
       const response = await fetch('http://localhost:8000/api/generate-palette', {
@@ -25,18 +38,33 @@ function App() {
         body: JSON.stringify({ prompt }),
       });
 
-      const data = await response.json();
+      console.log('Response status:', response.status);
+      setProgress(50);
 
-      if (data.palette) {
-        setPalette(data.palette);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log('Response data:', data);
+      setProgress(75);
+
+      if (data && data.palette) {
+        const convertedPalette = data.palette.map(color => `rgb(${color.join(', ')})`);
+        console.log('Converted palette:', convertedPalette);
+        setPalette(convertedPalette);
+        setStatusMessage('Palette generated successfully!');
       } else {
-        setError(data.error || 'Unexpected response format');
+        throw new Error(data.error || 'Unexpected response format');
       }
     } catch (error) {
       console.error('Error:', error);
-      setError('An error occurred while generating the palette');
+      setError(error.message || 'An error occurred while generating the palette');
+      setStatusMessage('Error generating palette. Try again.');
     } finally {
       setLoading(false);
+      setProgress(100);
+      setTimeout(() => setProgress(0), 500);
     }
   };
 
@@ -90,15 +118,19 @@ function App() {
         <input
           type="text"
           placeholder="Type your prompt here..."
-          className="flex-1 p-3 focus:outline-none focus:ring focus:ring-indigo-200 rounded-l-lg"
+          className="flex-1 p-3 focus:outline-none focus:ring focus:ring-violet-200 rounded-l-lg"
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           disabled={loading}
         />
         <button
-          className={`px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-r-lg flex items-center justify-center ${
+          className={`px-4 py-3 font-bold text-white rounded-r-lg flex items-center justify-center ${
             loading ? 'opacity-50 cursor-not-allowed' : ''
           }`}
+          style={{
+            backgroundColor: defaultColors.buttonBg,
+            hover: { backgroundColor: defaultColors.buttonHover }
+          }}
           onClick={handleGeneratePalette}
           disabled={loading}
         >
@@ -111,6 +143,20 @@ function App() {
       </div>
 
       {/* Error or Palette Display */}
+      {progress > 0 && (
+        <div className="w-full max-w-md mt-4 bg-gray-200 rounded-full h-2.5">
+          <div
+            className="h-2.5 rounded-full bg-violet-400 transition-all"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      )}
+
+      {/* Status Message */}
+      {statusMessage && (
+        <p className="mt-2 text-gray-700 font-semibold">{statusMessage}</p>
+      )}
+
       <div className="mt-6 w-full max-w-md">
         {error && (
           <div className="bg-red-100 text-red-700 p-4 rounded-lg shadow-sm">
@@ -118,9 +164,10 @@ function App() {
           </div>
         )}
 
+        {/*Generated Colour Palette */}
         {palette.length > 0 && (
           <div className="bg-white p-4 rounded-lg shadow-sm">
-            <h2 className="text-lg font-bold text-gray-700">Generated colour Palette:</h2>
+            <h2 className="text-lg font-bold text-gray-700">Generated Colour Palette:</h2>
             <div className="mt-2 flex">
               {palette.map((colour, index) => (
                 <div
