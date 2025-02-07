@@ -1,22 +1,23 @@
-# WebMuse - Color Palette Generator
+# WebMuse - Colour Palette Generator
 
-WebMuse is a web application that generates a color palette based on user prompts. The application leverages a backend API powered by the Arli AI model to create custom palettes of hex color codes that can be easily copied to the clipboard.
+WebMuse is a web application that generates a colour palette based on user prompts. The application leverages a backend API powered by the DeepSeek 7B model via Ollama to create custom palettes of colour codes that can be easily copied to the clipboard.
 
 ## Features
-- **Custom Color Palettes:** Enter a descriptive prompt, and the app generates five hex color codes matching the description.
-- **Clipboard Copying:** Click on a color to copy its hex code to your clipboard. A confirmation message \("Copied!"\) is displayed.
-- **Dynamic Popovers:** Each color displays a popover showing the hex code or the confirmation message when copied.
+- **Custom Colour Palettes:** Enter a descriptive prompt, and the app generates five colour codes matching the description.
+- **Clipboard Copying:** Click on a colour to copy its colour code to your clipboard. A confirmation message \("Copied!"\) is displayed.
+- **Dynamic Popovers:** Each colour displays a popover showing the colour code or the confirmation message when copied.
 - **Responsive Design:** Built with modern UI components for a seamless user experience.
 
 ## Tech Stack
 - **Frontend:** React, TailwindCSS
 - **Backend:** Node.js, Express.js
-- **AI API:** Arli AI
-- **Others:** Environment variables (dotenv), CORS
+- **AI API:** DeepSeek-R1-Distill-Qwen-7B via Ollama
+- **Others:** Flask, CORS
 
 ## Prerequisites
 - Node.js and npm installed on your machine.
-- An API key from Arli AI.
+- Ollama installed (installation guide).
+- DeepSeek-R1 model downloaded via Ollama.
 
 ## Installation
 
@@ -60,20 +61,36 @@ WebMuse is a web application that generates a color palette based on user prompt
    ```
    The app will open in your default browser at `http://localhost:3000`.
 
+### Ollama Setup
+1. Navigate to the ollama directory:
+   ```bash
+   cd ../ollama
+   ```
+
+2. Pull DeepSeek model from Ollama:
+   ```bash
+   ollama pull deepseek-r1:7b
+   ```
+
+3. Start the ollama server:
+   ```bash
+   python run_ollama.py
+   ```
+   The app will open in your default browser at `http://localhost:4000`.
+
 ## Usage
 1. Enter a descriptive prompt in the input box (e.g., "sunset on the beach").
 2. Click the "Generate" button.
-3. View the generated color palette.
-4. Hover over a color to see its hex code.
-5. Click on a color to copy it to the clipboard; the popover will display "Copied!".
+3. View the generated colour palette.
+4. Hover over a colour to see its colour code.
+5. Click on a colour to copy it to the clipboard; the popover will display "Copied!".
 
 ## Project Structure
 ```
 webmuse/
 ├── backend/
-│   ├── index.js          # Backend server
+│   ├── server.js         # Backend server
 │   ├── package.json      # Backend dependencies
-│   └── .env              # Environment variables (API key)
 ├── frontend/
 │   ├── src/
 │   │   ├── App.js        # Main React component
@@ -81,16 +98,14 @@ webmuse/
 │   │   └── index.js      # Entry point
 │   ├── public/           # Static files
 │   └── package.json      # Frontend dependencies
+├── ollama/
+│   └── run_ollama.py     # Ollama server
 └── README.md             # Project documentation
 ```
 
-## Environment Variables
-Ensure you set the following environment variable in the `.env` file:
-- `ARLIAI_API_KEY`: Your Arli AI API key.
-
 ## API Endpoints
 ### POST `/api/generate-palette`
-- **Description:** Generates a color palette based on a user prompt.
+- **Description:** Generates a colour palette based on a user prompt.
 - **Request Body:**
   ```json
   {
@@ -100,7 +115,6 @@ Ensure you set the following environment variable in the `.env` file:
 - **Response:**
   ```json
   {
-    "generatedText": "#FF5733 #C70039 #900C3F #FFC300 #DAF7A6",
     "palette": ["#FF5733", "#C70039", "#900C3F", "#FFC300", "#DAF7A6"]
   }
   ```
@@ -112,9 +126,9 @@ Contributions are welcome! If you'd like to contribute, please fork the reposito
 This project is licensed under the MIT License.
 
 ## Acknowledgments
-- [Arli AI](https://arliai.com) for the API.
+- [DeepSeek-R1 AI](https://ollama.com/library/deepseek-r1) for the AI API.
+- [Colormind](http://colormind.io) for the Colour Generator API.
 - [TailwindCSS](https://tailwindcss.com) for styling.
-- Inspiration and support from the developer community.
 
 ## Contact
 For any questions or feedback, feel free to contact me at [cpebenito88@gmail.com](mailto:cpebenito88@gmail.com).
